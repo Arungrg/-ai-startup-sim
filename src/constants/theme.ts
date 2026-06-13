@@ -11,6 +11,7 @@ export const COLORS = {
   amber: '#F59E0B',
   white: '#F9FAFB',
   muted: '#9CA3AF',
+  hint: '#6B7280',   // ← add this line
 };
 
 export const SPACING = {

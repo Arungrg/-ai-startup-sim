@@ -45,6 +45,7 @@ export interface StartupMetrics {
   investorConfidence: number;
   marketShare: number;
   runway: number;
+  mrr: number;   // ← add this
 }
 
 export interface GameState {
@@ -58,4 +59,6 @@ export interface GameState {
   fundingRound: number;
   isGameOver: boolean;
   isWin: boolean;
+  metricsHistory: StartupMetrics[];
+  gameOverReason?: string;   // ← add this
 }

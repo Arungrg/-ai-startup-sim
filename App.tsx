@@ -6,6 +6,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { StatusBar } from "expo-status-bar";
 import { COLORS } from "./src/constants/theme";
 
+import WinScreen from "./src/screens/game/WinScreen";
+import FailScreen from "./src/screens/game/FailScreen";
 import DashboardScreen from "./src/screens/tabs/DashboardScreen";
 import ProductsScreen from "./src/screens/tabs/ProductsScreen";
 import TeamScreen from "./src/screens/tabs/TeamScreen";
@@ -45,6 +47,8 @@ export default function App() {
         initialRouteName="Menu"
         screenOptions={{ headerShown: false }}
       >
+        <Stack.Screen name="Win" component={WinScreen} />
+        <Stack.Screen name="Fail" component={FailScreen} />
         <Stack.Screen name="Menu" component={MenuScreen} />
         <Stack.Screen name="Create" component={CreateScreen} />
         <Stack.Screen name="Game" component={GameTabs} />
