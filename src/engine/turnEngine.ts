@@ -2,6 +2,8 @@ import { GameState } from '../types/game';
 import { processEconomy } from './economyEngine';
 import { processGrowth } from './growthEngine';
 import { clamp } from './economyEngine';
+import { processProducts } from './productEngine';
+import { calcRevenueMultiplier } from './productEngine';
 
 // Win condition check
 function checkWinCondition(state: GameState): GameState {
@@ -65,10 +67,11 @@ export function processTurn(state: GameState): GameState {
   let s = { ...state, turn: state.turn + 1 };
 
   // Run all engines in order
-  s = processMorale(s);       // 1. Morale
-  s = processGrowth(s);       // 2. User growth
-  s = processEconomy(s);      // 3. Economy (revenue, burn, cash)
-  s = processReputation(s);   // 4. Reputation drift
+  s = processProducts(s);     // 1. Products (do this FIRST)
+  s = processMorale(s);       // 2. Morale
+  s = processGrowth(s);       // 3. User growth
+  s = processEconomy(s);      // 4. Economy
+  s = processReputation(s);   // 5. Reputation
 
   // Save snapshot for analytics chart
   s = {

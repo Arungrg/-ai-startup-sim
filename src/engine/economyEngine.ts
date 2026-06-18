@@ -11,7 +11,10 @@ export function calcRevenue(state: GameState): number {
   const conversionRate = 0.05;
   const price = 29;
   const qualityModifier = 0.5 + (productQuality / 100);
-  return Math.round(users * conversionRate * price * qualityModifier);
+  const featureMultiplier = state.features
+    .filter(f => f.active && f.revenueMultiplier > 1)
+    .reduce((mult, f) => mult * f.revenueMultiplier, 1.0);
+  return Math.round(users * conversionRate * price * qualityModifier * featureMultiplier);
 }
 
 // BurnRate = Salaries + Infrastructure + Marketing

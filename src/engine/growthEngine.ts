@@ -10,7 +10,7 @@ export function processGrowth(state: GameState): GameState {
     .reduce((sum, e) => sum + (e.skillScore * (e.morale / 100)), 0);
 
   // New users this turn
-  const baseAcquisition = (productQuality * 0.4) + (marketerBoost * 0.3) + 20;
+  const baseAcquisition = (productQuality * 0.4) + (marketerBoost * 0.3) + 50;
   const newUsers = Math.round(baseAcquisition);
 
   // Users lost to churn

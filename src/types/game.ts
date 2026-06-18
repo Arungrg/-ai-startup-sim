@@ -27,9 +27,14 @@ export interface ProductFeature {
   description: string;
   tier: number;
   status: FeatureStatus;
-  progress: number;
-  qualityBonus: number;
-  prerequisiteIds: string[];
+  progress: number;         // 0–100%
+  weeksToComplete: number;  // how many weeks to build
+  qualityBonus: number;     // +productQuality when done
+  revenueMultiplier: number;// multiplies revenue when active
+  churnReduction: number;   // reduces churnRate when done
+  userBonus: number;        // instant user boost when done
+  prerequisiteIds: string[];// features that must be done first
+  active: boolean;          // true when completed and contributing
 }
 
 export interface StartupMetrics {

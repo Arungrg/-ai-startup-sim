@@ -11,6 +11,7 @@ import {
 import { COLORS, SPACING, RADIUS } from "../../constants/theme";
 import { useGameStore } from "../../store/gameStore";
 import { GameState, Industry, FounderTrait } from "../../types/game";
+import { INITIAL_FEATURES } from "../../constants/features";
 
 const INDUSTRIES: { value: Industry; label: string; desc: string }[] = [
   { value: "AI_SAAS", label: "AI SaaS", desc: "High demand, fast growth" },
@@ -72,7 +73,7 @@ function createInitialState(
     isWin: false,
     metricsHistory: [],
     employees: [],
-    features: [],
+    features: INITIAL_FEATURES.map((f) => ({ ...f })),
     metrics: {
       cash: 50000,
       revenue: 0,
