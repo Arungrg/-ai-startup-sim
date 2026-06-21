@@ -12,6 +12,7 @@ import { COLORS, SPACING, RADIUS } from "../../constants/theme";
 import { useGameStore } from "../../store/gameStore";
 import { GameState, Industry, FounderTrait } from "../../types/game";
 import { INITIAL_FEATURES } from "../../constants/features";
+import { INITIAL_RIVALS } from "../../constants/rivals";
 
 const INDUSTRIES: { value: Industry; label: string; desc: string }[] = [
   { value: "AI_SAAS", label: "AI SaaS", desc: "High demand, fast growth" },
@@ -91,6 +92,8 @@ function createInitialState(
       runway: 100,
       mrr: 0,
     },
+    market: { demand: 65, growth: 8, competition: 55, regulation: 25 },
+    rivals: INITIAL_RIVALS.map((r) => ({ ...r })),
   };
 }
 

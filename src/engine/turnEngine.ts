@@ -6,6 +6,8 @@ import { processProducts } from './productEngine';
 import { calcRevenueMultiplier } from './productEngine';
 import { processEmployees } from './employeeEngine';
 import { processEvents } from './eventEngine';
+import { processMarket } from './marketEngine';
+import { processRivals } from './rivalEngine';
 
 // Win condition check
 function checkWinCondition(state: GameState): GameState {
@@ -75,13 +77,14 @@ export function processTurn(state: GameState): GameState {
   s = processGrowth(s);
   s = processEconomy(s);
   s = processReputation(s);
-  s = processEvents(s);        // ← add this line LAST
+  s = processMarket(s);        // ← add this
+  s = processRivals(s);        // ← add this
+  s = processEvents(s);
 
-  // Save snapshot for analytics chart
+ // Save snapshot for analytics chart
   s = { ...s, metricsHistory: [...(s.metricsHistory || []), { ...s.metrics }].slice(-20) };
 
   // Check win/lose
   s = checkWinCondition(s);
-
   return s;
 }

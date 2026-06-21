@@ -12,6 +12,8 @@ export type FeatureStatus =
 
 export type EventCategory = 'VIRAL' | 'CRISIS' | 'MARKET' | 'COMPETITION' | 'INTERNAL';
 
+export type RivalArchetype = 'AGGRESSIVE' | 'CONSERVATIVE' | 'INNOVATIVE' | 'MARKETING_HEAVY';
+
 export interface EventChoice {
   text: string;
   effect: Partial<StartupMetrics>;  // metrics to ADD (use negative for subtract)
@@ -24,6 +26,24 @@ export interface GameEvent {
   description: string;
   choices: EventChoice[];
   weight: number; // higher = more likely to be picked
+}
+
+
+export interface MarketState {
+  demand: number;       // 0-100, affects user acquisition
+  growth: number;       // % industry growth per year
+  competition: number;  // 0-100, higher = harder to grow
+  regulation: number;   // 0-100, risk of regulatory events
+}
+
+export interface Rival {
+  id: string;
+  name: string;
+  archetype: RivalArchetype;
+  users: number;
+  cash: number;
+  productQuality: number;
+  valuation: number;
 }
 
 export interface Employee {
@@ -84,4 +104,6 @@ export interface GameState {
   gameOverReason?: string;   // ← add this
   activeEvent: GameEvent | null;
   eventHistory: string[];
+  market: MarketState;
+  rivals: Rival[];
 }
