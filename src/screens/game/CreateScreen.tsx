@@ -73,6 +73,8 @@ function createInitialState(
     isWin: false,
     metricsHistory: [],
     employees: [],
+    activeEvent: null,
+    eventHistory: [],
     features: INITIAL_FEATURES.map((f) => ({ ...f })),
     metrics: {
       cash: 50000,

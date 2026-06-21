@@ -5,6 +5,7 @@ import { clamp } from './utils';
 import { processProducts } from './productEngine';
 import { calcRevenueMultiplier } from './productEngine';
 import { processEmployees } from './employeeEngine';
+import { processEvents } from './eventEngine';
 
 // Win condition check
 function checkWinCondition(state: GameState): GameState {
@@ -67,18 +68,17 @@ export function processTurn(state: GameState): GameState {
 
   let s = { ...state, turn: state.turn + 1 };
 
-    // Run all engines in order
-  s = processProducts(s);     // 1. Products
-  s = processEmployees(s);    // 2. Employee morale + effects
-  s = processMorale(s);       // 3. Team morale collapse check
-  s = processGrowth(s);       // 4. User growth
-  s = processEconomy(s);      // 5. Economy
-  s = processReputation(s);   // 6. Reputation
+  // Run all engines in order
+  s = processProducts(s);
+  s = processEmployees(s);
+  s = processMorale(s);
+  s = processGrowth(s);
+  s = processEconomy(s);
+  s = processReputation(s);
+  s = processEvents(s);        // ← add this line LAST
+
   // Save snapshot for analytics chart
-  s = {
-    ...s,
-    metricsHistory: [...(s.metricsHistory || []), { ...s.metrics }].slice(-20),
-  };
+  s = { ...s, metricsHistory: [...(s.metricsHistory || []), { ...s.metrics }].slice(-20) };
 
   // Check win/lose
   s = checkWinCondition(s);

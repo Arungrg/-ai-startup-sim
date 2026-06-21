@@ -10,6 +10,22 @@ export type EmployeeRole =
 export type FeatureStatus =
   'LOCKED' | 'AVAILABLE' | 'IN_PROGRESS' | 'COMPLETED';
 
+export type EventCategory = 'VIRAL' | 'CRISIS' | 'MARKET' | 'COMPETITION' | 'INTERNAL';
+
+export interface EventChoice {
+  text: string;
+  effect: Partial<StartupMetrics>;  // metrics to ADD (use negative for subtract)
+}
+
+export interface GameEvent {
+  id: string;
+  category: EventCategory;
+  title: string;
+  description: string;
+  choices: EventChoice[];
+  weight: number; // higher = more likely to be picked
+}
+
 export interface Employee {
   id: string;
   name: string;
@@ -66,4 +82,6 @@ export interface GameState {
   isWin: boolean;
   metricsHistory: StartupMetrics[];
   gameOverReason?: string;   // ← add this
+  activeEvent: GameEvent | null;
+  eventHistory: string[];
 }

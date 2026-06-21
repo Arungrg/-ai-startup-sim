@@ -9,6 +9,7 @@ import {
 import { COLORS, SPACING, RADIUS } from "../../constants/theme";
 import { useGameStore } from "../../store/gameStore";
 import { processTurn } from "../../engine/turnEngine";
+import { resolveEvent } from "../../engine/eventEngine";
 
 // Format large numbers: 1200 → $1.2K
 function fmt(n: number): string {
@@ -69,6 +70,44 @@ function RevenueChart({ history }: { history: any[] }) {
   );
 }
 
+function EventCard({
+  game,
+  onChoice,
+}: {
+  game: any;
+  onChoice: (choice: any) => void;
+}) {
+  if (!game.activeEvent) return null;
+  const event = game.activeEvent;
+
+  const categoryColors: Record<string, string> = {
+    VIRAL: COLORS.green,
+    CRISIS: COLORS.red,
+    MARKET: COLORS.amber,
+    COMPETITION: COLORS.purple,
+    INTERNAL: COLORS.cyan,
+  };
+  const color = categoryColors[event.category] || COLORS.cyan;
+
+  return (
+    <View
+      style={[styles.card, { borderColor: color, marginBottom: SPACING.md }]}
+    >
+      <Text style={[styles.cardTitle, { color }]}>{event.title}</Text>
+      <Text style={styles.eventDesc}>{event.description}</Text>
+      {event.choices.map((choice: any, i: number) => (
+        <TouchableOpacity
+          key={i}
+          style={styles.choiceBtn}
+          onPress={() => onChoice(choice)}
+        >
+          <Text style={styles.choiceBtnText}>{choice.text}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+  );
+}
+
 export default function DashboardScreen({ navigation }: any) {
   const game = useGameStore((s) => s.game);
   const setGame = useGameStore((s) => s.setGame);
@@ -121,6 +160,14 @@ export default function DashboardScreen({ navigation }: any) {
           <Text style={styles.nextBtnText}>Next week ↗</Text>
         </TouchableOpacity>
       </View>
+
+      <EventCard
+        game={game}
+        onChoice={(choice) => {
+          const newState = resolveEvent(game, choice);
+          setGame(newState);
+        }}
+      />
 
       {/* HUD — 6 metric cards */}
       <View style={styles.hud}>
@@ -263,4 +310,19 @@ const styles = StyleSheet.create({
   },
   statLabel: { fontSize: 13, color: COLORS.muted },
   statValue: { fontSize: 13, fontWeight: "500", color: COLORS.white },
+  eventDesc: {
+    fontSize: 13,
+    color: COLORS.muted,
+    lineHeight: 18,
+    marginBottom: SPACING.md,
+  },
+  choiceBtn: {
+    backgroundColor: COLORS.elevated,
+    borderRadius: RADIUS.md,
+    padding: SPACING.sm,
+    marginBottom: SPACING.sm,
+    borderWidth: 0.5,
+    borderColor: COLORS.border,
+  },
+  choiceBtnText: { fontSize: 13, color: COLORS.white },
 });
