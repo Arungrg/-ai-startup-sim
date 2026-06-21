@@ -1,16 +1,14 @@
 import { GameState } from '../types/game';
 import { clamp } from './economyEngine';
+import { getRoleProductivity } from './employeeEngine';
 
 export function processGrowth(state: GameState): GameState {
-  const { users, productQuality, churnRate, marketShare } = state.metrics;
+  const { users, productQuality, churnRate } = state.metrics;
 
-  // Marketers boost acquisition
-  const marketerBoost = state.employees
-    .filter(e => e.role === 'MARKETER')
-    .reduce((sum, e) => sum + (e.skillScore * (e.morale / 100)), 0);
+  const marketerBoost = getRoleProductivity(state.employees, 'MARKETER');
 
-  // New users this turn
-  const baseAcquisition = (productQuality * 0.4) + (marketerBoost * 0.3) + 50;
+  // New users this turn — product quality + marketer effort + base organic growth
+  const baseAcquisition = (productQuality * 0.4) + (marketerBoost * 0.5) + 50;
   const newUsers = Math.round(baseAcquisition);
 
   // Users lost to churn

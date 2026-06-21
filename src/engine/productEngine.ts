@@ -1,6 +1,5 @@
 import { GameState, ProductFeature } from '../types/game';
-import { clamp } from './economyEngine';
-
+import { clamp } from './utils';
 // How fast features progress — based on engineer skill
 function calcDevSpeed(state: GameState): number {
   const engineers = state.employees.filter(

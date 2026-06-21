@@ -1,4 +1,6 @@
 import { GameState } from '../types/game';
+import { getRoleProductivity } from './employeeEngine';
+
 
 // Helper — keeps a number between min and max
 export function clamp(value: number, min: number, max: number): number {
@@ -8,15 +10,19 @@ export function clamp(value: number, min: number, max: number): number {
 // Revenue = Users × ConversionRate × Price × QualityModifier
 export function calcRevenue(state: GameState): number {
   const { users, productQuality } = state.metrics;
-  const conversionRate = 0.05;
+  const salesBoost = getRoleProductivity(state.employees, 'SALES');
+
+  const baseConversionRate = 0.05;
+  const conversionRate = baseConversionRate + (salesBoost / 10000); // small bonus
   const price = 29;
   const qualityModifier = 0.5 + (productQuality / 100);
+
   const featureMultiplier = state.features
     .filter(f => f.active && f.revenueMultiplier > 1)
     .reduce((mult, f) => mult * f.revenueMultiplier, 1.0);
+
   return Math.round(users * conversionRate * price * qualityModifier * featureMultiplier);
 }
-
 // BurnRate = Salaries + Infrastructure + Marketing
 export function calcBurnRate(state: GameState): number {
   const salaries = state.employees.reduce((sum, e) => sum + e.salary, 0);
