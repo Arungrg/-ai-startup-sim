@@ -57,6 +57,13 @@ export interface Employee {
   hiredTurn: number;
 }
 
+export interface FundingRoundInfo {
+  name: string;
+  amount: number;
+  dilution: number;  // 0.0-1.0, fraction of equity given away
+  scoreThreshold: number;
+}
+
 export interface ProductFeature {
   id: string;
   name: string;
@@ -106,4 +113,5 @@ export interface GameState {
   eventHistory: string[];
   market: MarketState;
   rivals: Rival[];
+  equityRemaining: number;
 }

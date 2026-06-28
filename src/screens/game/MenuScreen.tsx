@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import { COLORS, SPACING, RADIUS } from "../../constants/theme";
+import { COLORS, SPACING, RADIUS, FONTS } from "../../constants/theme";
 import { useGameStore } from "../../store/gameStore";
 
 export default function MenuScreen({ navigation }: any) {
@@ -16,6 +16,13 @@ export default function MenuScreen({ navigation }: any) {
         onPress={() => navigation.navigate("Create")}
       >
         <Text style={styles.primaryText}>New Game ↗</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={{ position: "absolute", top: 50, right: 24 }}
+        onPress={() => navigation.navigate("Settings")}
+      >
+        <Text style={{ fontSize: 24 }}>⚙️</Text>
       </TouchableOpacity>
 
       {game && !game.isGameOver && (
@@ -43,14 +50,22 @@ const styles = StyleSheet.create({
     padding: SPACING.xl,
   },
   title: {
-    fontSize: 42,
-    fontWeight: "700",
+    fontSize: 44,
+    fontFamily: FONTS.heading,
     color: COLORS.white,
     textAlign: "center",
-    lineHeight: 48,
+    lineHeight: 50,
     marginBottom: SPACING.sm,
+    textShadowColor: COLORS.purple,
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 20,
   },
-  subtitle: { fontSize: 16, color: COLORS.muted, marginBottom: SPACING.xxl },
+  subtitle: {
+    fontSize: 16,
+    fontFamily: FONTS.body,
+    color: COLORS.muted,
+    marginBottom: SPACING.xxl,
+  },
   primaryBtn: {
     backgroundColor: COLORS.purple,
     borderRadius: RADIUS.md,
@@ -59,6 +74,11 @@ const styles = StyleSheet.create({
     width: "100%",
     alignItems: "center",
     marginBottom: SPACING.md,
+    shadowColor: COLORS.purple,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.5,
+    shadowRadius: 12,
+    elevation: 8,
   },
   primaryText: { color: COLORS.white, fontSize: 16, fontWeight: "600" },
   secondaryBtn: {

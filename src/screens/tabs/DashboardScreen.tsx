@@ -6,10 +6,19 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { COLORS, SPACING, RADIUS } from "../../constants/theme";
+import {
+  COLORS,
+  SPACING,
+  RADIUS,
+  FONTS,
+  GLASS_CARD,
+} from "../../constants/theme";
 import { useGameStore } from "../../store/gameStore";
 import { processTurn } from "../../engine/turnEngine";
 import { resolveEvent } from "../../engine/eventEngine";
+import { MotiView } from "moti";
+import { playSound } from "../../constants/sounds";
+import { haptic } from "../../constants/haptics";
 
 // Format large numbers: 1200 → $1.2K
 function fmt(n: number): string {
@@ -36,10 +45,15 @@ function MetricCard({
   color?: string;
 }) {
   return (
-    <View style={styles.metricCard}>
+    <MotiView
+      from={{ opacity: 0, translateY: 8 }}
+      animate={{ opacity: 1, translateY: 0 }}
+      transition={{ type: "timing", duration: 350 }}
+      style={styles.metricCard}
+    >
       <Text style={styles.metricLabel}>{label}</Text>
       <Text style={[styles.metricValue, color ? { color } : {}]}>{value}</Text>
-    </View>
+    </MotiView>
   );
 }
 
@@ -137,9 +151,18 @@ export default function DashboardScreen({ navigation }: any) {
 
   function handleNextTurn() {
     if (!game || isGameOver) return;
+    haptic.action();
+    playSound("click"); // ← add this
     const newState = processTurn(game);
     setGame(newState);
     if (newState.isGameOver) {
+      if (newState.isWin) {
+        haptic.success();
+        playSound("success");
+      } else {
+        haptic.error();
+        playSound("notification");
+      }
       navigation.navigate(newState.isWin ? "Win" : "Fail");
     }
   }
@@ -153,12 +176,26 @@ export default function DashboardScreen({ navigation }: any) {
           <Text style={styles.weekLabel}>Week {turn}</Text>
         </View>
         <TouchableOpacity
-          style={[styles.nextBtn, isGameOver && styles.nextBtnDisabled]}
-          onPress={handleNextTurn}
-          disabled={isGameOver}
+          style={styles.fundingBtn}
+          onPress={() => navigation.navigate("Funding")}
         >
-          <Text style={styles.nextBtnText}>Next week ↗</Text>
+          <Text style={styles.fundingBtnText}>
+            💰 Funding — Round {game.fundingRound + 1}/5
+          </Text>
         </TouchableOpacity>
+        <MotiView
+          animate={{ scale: 1 }}
+          transition={{ type: "timing", duration: 100 }}
+        >
+          <TouchableOpacity
+            style={[styles.nextBtn, isGameOver && styles.nextBtnDisabled]}
+            onPress={handleNextTurn}
+            disabled={isGameOver}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.nextBtnText}>Next week ↗</Text>
+          </TouchableOpacity>
+        </MotiView>
       </View>
 
       <EventCard
@@ -274,16 +311,17 @@ const styles = StyleSheet.create({
     width: "31%",
     borderWidth: 0.5,
     borderColor: COLORS.border,
+    shadowColor: COLORS.cyan,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.15,
+    shadowRadius: 8,
   },
   metricLabel: { fontSize: 11, color: COLORS.muted, marginBottom: 2 },
   metricValue: { fontSize: 15, fontWeight: "500", color: COLORS.white },
   card: {
-    backgroundColor: COLORS.card,
-    borderRadius: RADIUS.lg,
+    ...GLASS_CARD,
     padding: SPACING.md,
     marginBottom: SPACING.md,
-    borderWidth: 0.5,
-    borderColor: COLORS.border,
   },
   cardTitle: {
     fontSize: 13,
@@ -325,4 +363,14 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
   },
   choiceBtnText: { fontSize: 13, color: COLORS.white },
+  fundingBtn: {
+    backgroundColor: COLORS.elevated,
+    borderRadius: RADIUS.md,
+    padding: SPACING.sm,
+    alignItems: "center",
+    marginBottom: SPACING.md,
+    borderWidth: 0.5,
+    borderColor: COLORS.border,
+  },
+  fundingBtnText: { color: COLORS.white, fontSize: 13, fontWeight: "500" },
 });

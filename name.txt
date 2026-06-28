@@ -1,0 +1,22 @@
+val imageView = findViewById<ImageView>(R.id.animView)
+val frameAnimation = imageView.drawable as AnimationDrawable
+
+// Start the animation loop
+frameAnimation.start() 
+
+
+
+<animation-list xmlns:android="http://android.com" android:oneshot="false">
+    <item android:drawable="@drawable/frame_one" android:duration="150" />
+    <item android:drawable="@drawable/frame_two" android:duration="150" />
+    <item android:drawable="@drawable/frame_three" android:duration="150" />
+</animation-list>
+
+
+
+
+<ImageView
+    android:id="@+id/animView"
+    android:layout_width="100dp"
+    android:layout_height="100dp"
+    android:src="@drawable/loading_anim" />

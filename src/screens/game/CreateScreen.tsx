@@ -70,6 +70,7 @@ function createInitialState(
     founderTrait: trait,
     turn: 0,
     fundingRound: 0,
+    equityRemaining: 100,
     isGameOver: false,
     isWin: false,
     metricsHistory: [],

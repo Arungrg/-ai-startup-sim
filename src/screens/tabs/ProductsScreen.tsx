@@ -10,7 +10,10 @@ import {
 import { COLORS, SPACING, RADIUS } from "../../constants/theme";
 import { useGameStore } from "../../store/gameStore";
 import { startFeature } from "../../engine/productEngine";
+import { haptic } from "../../constants/haptics";
 import { ProductFeature } from "../../types/game";
+import { playSound } from "../../constants/sounds";
+import { MotiView } from "moti";
 
 // Status badge color
 function statusColor(status: string): string {
@@ -93,8 +96,10 @@ function FeatureCard({
       {feature.status === "IN_PROGRESS" && (
         <View style={styles.progressContainer}>
           <View style={styles.progressBg}>
-            <View
-              style={[styles.progressFill, { width: `${progress}%` as any }]}
+            <MotiView
+              animate={{ width: `${progress}%` as any }}
+              transition={{ type: "timing", duration: 500 }}
+              style={styles.progressFill}
             />
           </View>
           <Text style={styles.progressText}>{progress}%</Text>
@@ -143,6 +148,8 @@ export default function ProductsScreen() {
       `Start building "${feature.name}"?\nTakes ${feature.weeksToComplete} weeks.`,
     );
     if (confirmed) {
+      haptic.action();
+      playSound("click"); // ← add this
       const newState = startFeature(game, featureId);
       setGame(newState);
     }

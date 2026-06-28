@@ -21,3 +21,17 @@ export const SPACING = {
 export const RADIUS = {
   sm: 6, md: 10, lg: 16, full: 999,
 };
+
+export const FONTS = {
+  heading: 'SpaceGrotesk-Bold',
+  headingMedium: 'SpaceGrotesk-Medium',
+  body: 'Inter-Regular',
+  bodyMedium: 'Inter-Medium',
+};
+
+export const GLASS_CARD = {
+  backgroundColor: 'rgba(31, 41, 55, 0.6)',
+  borderWidth: 1,
+  borderColor: 'rgba(124, 58, 237, 0.25)',
+  borderRadius: RADIUS.lg,
+};

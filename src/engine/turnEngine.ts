@@ -12,12 +12,10 @@ import { processRivals } from './rivalEngine';
 // Win condition check
 function checkWinCondition(state: GameState): GameState {
   if (state.metrics.valuation >= 500000000) {
-    return { ...state, isWin: true, isGameOver: true,
-      gameOverReason: 'UNICORN' };
+    return { ...state, isWin: true, isGameOver: true, gameOverReason: 'UNICORN' };
   }
-  if (state.fundingRound >= 4) {
-    return { ...state, isWin: true, isGameOver: true,
-      gameOverReason: 'IPO' };
+  if (state.fundingRound >= 5) {
+    return { ...state, isWin: true, isGameOver: true, gameOverReason: 'IPO' };
   }
   return state;
 }

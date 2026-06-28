@@ -8,6 +8,8 @@ import {
 } from "react-native";
 import { COLORS, SPACING, RADIUS } from "../../constants/theme";
 import { useGameStore } from "../../store/gameStore";
+import { haptic } from "../../constants/haptics";
+import { playSound } from "../../constants/sounds";
 import { hireEmployee, fireEmployee } from "../../engine/employeeEngine";
 import {
   HIRE_POOL,
@@ -120,6 +122,8 @@ export default function TeamScreen() {
       `Hire ${candidate.name} for ${fmt(candidate.salary)}/week?`,
     );
     if (confirmed) {
+      haptic.success();
+      playSound("cash"); // ← add this
       setGame(hireEmployee(game, candidate));
     }
   }
@@ -130,6 +134,7 @@ export default function TeamScreen() {
       `Fire ${name}? This will hurt team morale.`,
     );
     if (confirmed) {
+      haptic.warning();
       setGame(fireEmployee(game, employeeId));
     }
   }
